@@ -2,6 +2,31 @@ import streamlit as st
 import pandas as pd
 import os
 
+# PANDAS CONFIGURAÇÃO DATAFRAME (Projeção)
+
+# Ler e converter arquivo para objeto dataframe pandas
+launch_df = pd.read_csv('space.csv')
+
+
+# 1. Limpa os nomes das colunas (remove espaços em branco antes e depois)
+launch_df.columns = launch_df.columns.str.strip()
+
+# 2. Converte a coluna de data para o formato datetime e lida com o 'UTC'
+launch_df['Launch date'] = pd.to_datetime(launch_df['Launch date'].str.replace('UTC', '').str.strip(), errors='coerce')
+
+# 3. Cria uma nova coluna 'Year' extraindo o ano da data de lançamento
+launch_df['Year'] = launch_df['Launch date'].dt.year
+
+# 4. deletando coluna rocket pois eu não uso
+launch_df = launch_df.drop(columns={"Rocket"})
+
+# Mostrando colunas df
+print(launch_df.columns)
+print("")
+# tipo de dados utilizado na tabela
+print(launch_df.dtypes)
+
+# STREAMLIT
 st.set_page_config(page_title="Launch Cadency Visualizator", layout="wide")
 
 # US-01: Título e descrição do projeto
@@ -12,9 +37,26 @@ st.text("All dashboards in this app, gives a complete view about the today's ast
 # US-02: Mostrar dataframe
 # Ler arquivo
 # converter arquivo para objeto dataframe pandas
-pandas_dataframe = pd.read_csv('space.csv')
+launch_df = pd.read_csv('space.csv')
+
+# --- Início da Limpeza e Preparação ---
+
+# 1. Limpa os nomes das colunas (remove espaços em branco antes e depois)
+launch_df.columns = launch_df.columns.str.strip()
+
+# 2. Converte a coluna de data para o formato datetime e lida com o 'UTC'
+df['Launch date'] = pd.to_datetime(df['Launch date'].str.replace('UTC', '').str.strip(), errors='coerce')
+
+# 3. Cria uma nova coluna 'Year' extraindo o ano da data de lançamento
+df['Year'] = df['Launch date'].dt.year
+
+# 4. deletando coluna rocket pois eu não uso
+
+
+
+
+
 
 # mostrar objeto dataframe em um dataframe do streamlit
-st.dataframe(pandas_dataframe)
-
-# Salvar no github
+st.dataframe(launch_df, hide_index=True)
+# grafico de lançamento por ano
