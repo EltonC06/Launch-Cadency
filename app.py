@@ -35,28 +35,4 @@ st.text("Launch Cadency Visualizator (VCS) is a program made to track all rocket
 st.text("All dashboards in this app, gives a complete view about the today's astronautic cenarious and how it's been changing. Enjoy it!")
 
 # US-02: Mostrar dataframe
-# Ler arquivo
-# converter arquivo para objeto dataframe pandas
-launch_df = pd.read_csv('space.csv')
-
-# --- Início da Limpeza e Preparação ---
-
-# 1. Limpa os nomes das colunas (remove espaços em branco antes e depois)
-launch_df.columns = launch_df.columns.str.strip()
-
-# 2. Converte a coluna de data para o formato datetime e lida com o 'UTC'
-df['Launch date'] = pd.to_datetime(df['Launch date'].str.replace('UTC', '').str.strip(), errors='coerce')
-
-# 3. Cria uma nova coluna 'Year' extraindo o ano da data de lançamento
-df['Year'] = df['Launch date'].dt.year
-
-# 4. deletando coluna rocket pois eu não uso
-
-
-
-
-
-
-# mostrar objeto dataframe em um dataframe do streamlit
 st.dataframe(launch_df, hide_index=True)
-# grafico de lançamento por ano
