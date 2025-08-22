@@ -45,4 +45,4 @@ st.dataframe(launch_df, hide_index=True)
 # Agrupando linhas por ano, contando Ids presentes em cada ano e colocando na coluna de Launch Count
 launches_per_year_df = launch_df.groupby("Year")['Id'].count().reset_index(name='Launch Count')
 
-st.bar_chart(launches_per_year_df, x="Year", y="Launch Count")
+st.line_chart(launches_per_year_df, x="Year", y="Launch Count", color="#03BB40", use_container_width=True)
