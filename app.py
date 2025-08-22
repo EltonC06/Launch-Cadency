@@ -54,10 +54,7 @@ value = st.slider(label="Filtro por ano", min_value=1955, max_value=2020)
 
 # Agora de acordo com o ano, eu deleto todos os anos anteriores ao que está selecionado no slider
 
-for index, linha in launches_per_year_df.iterrows():
-    print("Teste")
-    if linha["Year"] < value:
-        launches_per_year_df = launches_per_year_df.drop(index)
+filtered_launches_per_year_df = launches_per_year_df[launches_per_year_df["Year"] >= value]
 
-st.line_chart(launches_per_year_df, x="Year", y="Launch Count", color="#03BB40")
+st.line_chart(filtered_launches_per_year_df, x="Year", y="Launch Count", color="#03BB40")
 
