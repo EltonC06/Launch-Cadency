@@ -46,11 +46,9 @@ st.dataframe(launch_df, hide_index=True)
 launches_per_year_df = launch_df.groupby("Year")['Id'].count().reset_index(name='Launch Count')
 launches_per_year_df["Year"] = launches_per_year_df["Year"].astype(int)
 
-st.line_chart(launches_per_year_df, x="Year", y="Launch Count", color="#03BB40", use_container_width=True)
-
 # Como usuário, quero ter um filtro de slider para selecionar um intervalo de anos e ver os dados apenas para esse período
 
-value = st.slider(label="Filtro por ano", min_value=1955, max_value=2020)
+value = st.slider(label="Filtro por ano", min_value=1957, max_value=2020)
 
 # Agora de acordo com o ano, eu deleto todos os anos anteriores ao que está selecionado no slider
 
