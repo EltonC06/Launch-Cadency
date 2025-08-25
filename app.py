@@ -57,3 +57,18 @@ filtered_launches_per_year_df = launches_per_year_df[
 ]
 
 st.line_chart(filtered_launches_per_year_df, x="Year", y="Launch Count", color="#03BB40")
+
+launches_total = launch_df["Id"].count()
+success_rate = round(((launch_df["Status Mission"] == "Success").sum() / launches_total) * 100, 2)
+failure_rate = round(((launch_df["Status Mission"] == "Failure").sum() / launches_total) * 100, 2)
+print(launch_df["Status Mission"].unique())
+company_number = launch_df["Company Name"].nunique()
+
+kpi_table = {
+    'launches total': [launches_total],
+    'Success rate': [success_rate],
+    'Total companies': [company_number]
+}
+
+st.dataframe(kpi_table, hide_index=True)
+
