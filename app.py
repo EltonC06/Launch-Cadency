@@ -22,7 +22,6 @@ launch_df = launch_df.drop(columns={"Rocket"})
 
 # Mostrando colunas df
 #print(launch_df.columns)
-print("")
 # tipo de dados utilizado na tabela
 #print(launch_df.dtypes)
 
@@ -48,11 +47,13 @@ launches_per_year_df["Year"] = launches_per_year_df["Year"].astype(int)
 
 # Como usuário, quero ter um filtro de slider para selecionar um intervalo de anos e ver os dados apenas para esse período
 
-value = st.slider(label="Filtro por ano", min_value=1957, max_value=2020)
+min_value, max_value = st.slider(label="Filtro por ano", min_value=1957, max_value=2020, value=(1957, 2020))
 
 # Agora de acordo com o ano, eu deleto todos os anos anteriores ao que está selecionado no slider
 
-filtered_launches_per_year_df = launches_per_year_df[launches_per_year_df["Year"] >= value]
+filtered_launches_per_year_df = launches_per_year_df[
+    (launches_per_year_df["Year"] >= min_value) & 
+    (launches_per_year_df["Year"] <= max_value)
+]
 
 st.line_chart(filtered_launches_per_year_df, x="Year", y="Launch Count", color="#03BB40")
-
