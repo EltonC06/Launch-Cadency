@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import os
+import matplotlib.pyplot as plt
+import plotly.express as px
 
 # PANDAS CONFIGURAÇÃO DATAFRAME (Projeção)
 
@@ -61,6 +63,9 @@ st.line_chart(filtered_launches_per_year_df, x="Year", y="Launch Count", color="
 launches_total = launch_df["Id"].count()
 success_rate = round(((launch_df["Status Mission"] == "Success").sum() / launches_total) * 100, 2)
 failure_rate = round(((launch_df["Status Mission"] == "Failure").sum() / launches_total) * 100, 2)
+prelaunch_failure = round(((launch_df["Status Mission"] == "Prelaunch Failure").sum() / launches_total) * 100, 2)
+partial_failure = round(((launch_df["Status Mission"] == "Partial Failure").sum() / launches_total) * 100, 2)
+
 print(launch_df["Status Mission"].unique())
 company_number = launch_df["Company Name"].nunique()
 
@@ -72,3 +77,17 @@ kpi_table = {
 
 st.dataframe(kpi_table, hide_index=True)
 
+pizza_data = pd.DataFrame({
+    'rate': ['Success', 'Failure', 'Partial Failure', 'Prelaunch Failure'],
+    'values': [success_rate, failure_rate, partial_failure, prelaunch_failure]
+})
+
+st.title("Success Rate of Space Missions")
+
+fig, ax = plt.subplots()
+ax.pie(
+    pizza_data['values'], 
+    labels=pizza_data['rate'], 
+    autopct='%1.1f%%'   # mostra porcentagem com 1 casa decimal
+)
+st.pyplot(fig)
