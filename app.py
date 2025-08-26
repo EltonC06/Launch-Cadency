@@ -21,10 +21,9 @@ launch_df['Year'] = launch_df['Launch date'].dt.year
 launch_df = launch_df.drop(columns={"Rocket"})
 
 # Mostrando colunas df
-print(launch_df.columns)
-print("")
+#print(launch_df.columns)
 # tipo de dados utilizado na tabela
-print(launch_df.dtypes)
+#print(launch_df.dtypes)
 
 # STREAMLIT
 st.set_page_config(page_title="Launch Cadency Visualizator", layout="wide")
@@ -36,3 +35,40 @@ st.text("All dashboards in this app, gives a complete view about the today's ast
 
 # US-02: Mostrar dataframe
 st.dataframe(launch_df, hide_index=True)
+
+# US-03: Mostrar grafico de barra compara número de lançamento (eixo Y) por ano (eixo X)
+
+# Temos que agrupar os lançamentos pela coluna Year. E essa coluna Year se transformará nos index dos grupos
+# 2018: 10; 2019: 20; 2020: 30
+
+# Agrupando linhas por ano, contando Ids presentes em cada ano e colocando na coluna de Launch Count
+launches_per_year_df = launch_df.groupby("Year")['Id'].count().reset_index(name='Launch Count')
+launches_per_year_df["Year"] = launches_per_year_df["Year"].astype(int)
+
+# Como usuário, quero ter um filtro de slider para selecionar um intervalo de anos e ver os dados apenas para esse período
+
+min_value, max_value = st.slider(label="Filtro por ano", min_value=1957, max_value=2020, value=(1957, 2020))
+
+# Agora de acordo com o ano, eu deleto todos os anos anteriores ao que está selecionado no slider
+
+filtered_launches_per_year_df = launches_per_year_df[
+    (launches_per_year_df["Year"] >= min_value) & 
+    (launches_per_year_df["Year"] <= max_value)
+]
+
+st.line_chart(filtered_launches_per_year_df, x="Year", y="Launch Count", color="#03BB40")
+
+launches_total = launch_df["Id"].count()
+success_rate = round(((launch_df["Status Mission"] == "Success").sum() / launches_total) * 100, 2)
+failure_rate = round(((launch_df["Status Mission"] == "Failure").sum() / launches_total) * 100, 2)
+print(launch_df["Status Mission"].unique())
+company_number = launch_df["Company Name"].nunique()
+
+kpi_table = {
+    'launches total': [launches_total],
+    'Success rate': [success_rate],
+    'Total companies': [company_number]
+}
+
+st.dataframe(kpi_table, hide_index=True)
+
